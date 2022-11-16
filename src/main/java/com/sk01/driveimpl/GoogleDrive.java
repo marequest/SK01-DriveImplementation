@@ -86,7 +86,7 @@ public class GoogleDrive {
             String query = "name='" + files[i] + "'";
             FileList list = null;
             try {
-                list = GoogleDrive.service.files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
+                list = GoogleDrive.getDriveService().files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -115,7 +115,7 @@ public class GoogleDrive {
         String query = "name=" + "'" + name + "'";
         FileList list = null;
         try {
-            list = GoogleDrive.service.files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
+            list = GoogleDrive.getDriveService().files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class GoogleDrive {
         String query = "name=" + "'" + name + "'";
         FileList list = null;
         try {
-            list = GoogleDrive.service.files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
+            list = GoogleDrive.getDriveService().files().list().setQ(query).setFields("nextPageToken, files(id, name, size, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
         }
         catch (IOException e) {
             e.printStackTrace();
