@@ -5,6 +5,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.sk01.storage.Storage;
+import com.sk01.utils.StorageInfo;
 
 
 import java.io.*;
@@ -26,8 +27,31 @@ public class DriveStorage extends Storage {
     }
 
     @Override
-    public void editConfig(String path, String maxSize, String maxNumOfFiles, List<String> unsupportedFiles) {
+    public void editConfig(String path, String maxSize, String maxNumOfFiles, List<String> unsupportedFiles) throws Exception {
+        // TODO storageName?
+        String storageName = "Vidi sta sa ovim";
 
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("path", storageName);
+        configMap.put("maxSize", (maxSize != null) ? maxSize : StorageInfo.getInstance().getConfig().getMaxSize());
+        configMap.put("maxNumOfFiles", (maxNumOfFiles != null) ? maxNumOfFiles : StorageInfo.getInstance().getConfig().getNumberOfFiles());
+        configMap.put("unsupportedFiles", (unsupportedFiles != null) ? unsupportedFiles : StorageInfo.getInstance().getConfig().getUnsuportedFiles());
+
+        java.io.File config = new java.io.File("config.json");
+        try {
+            Writer writer = new FileWriter(config);
+            new Gson().toJson(configMap, writer);
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Uzimamo fajl, brisemo, dodajemo novi
+        File configDrive = GoogleDrive.getFile(storageName + "/config.json");
+        GoogleDrive.getDriveService().files().delete(configDrive.getId()).execute();
+        createSettings(config, storageName);
+        config.delete();
     }
 
     @Override
