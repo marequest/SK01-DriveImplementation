@@ -34,7 +34,8 @@ public class DriveCreate extends Create {
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
         fileMetadata.setParents(List.of(parent.getId()));
 
-        GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id, name").execute();
+        File file = GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id, name").execute();
+        System.out.println("Folder ID: " + file.getId());
     }
 
     @Override
@@ -49,7 +50,8 @@ public class DriveCreate extends Create {
             fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
             try {
-                GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id").execute();
+                File file = GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id").execute();
+                System.out.println("Folder ID: " + file.getId());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,16 +61,52 @@ public class DriveCreate extends Create {
 
     @Override
     public void createFiles(String path) throws Exception {
+        path = StorageInfo.getInstance().getConfig().getPath() + path;
+        String name = "File1";
+
+        makeFile(path, name);
 
     }
 
     @Override
     public void createFiles(String path, String name) throws Exception {
+        path = StorageInfo.getInstance().getConfig().getPath() + path;
 
+        // TODO Provera configa
+
+        makeFile(path, name);
+
+    }
+
+    private void makeFile(String path, String name) throws IOException {
+        File parent = GoogleDrive.getFile(path);
+        File fileMetadata = new File();
+
+        fileMetadata.setName(name);
+        fileMetadata.setParents(List.of(parent.getId()));
+
+        File file = GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id, name").execute();
+        System.out.println("File ID: " + file.getId());
     }
 
     @Override
     public void createFiles(int velicinaListe) {
+        String name = "fileRek";
+        for(int i = 0; i < velicinaListe; i++) {
+            name = name.concat(String.valueOf(i));
+
+            File fileMetadata = new File();
+
+            fileMetadata.setName(name);
+
+            File file = null;
+            try {
+                file = GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id, name").execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("File ID: " + file.getId());
+        }
 
     }
 }
