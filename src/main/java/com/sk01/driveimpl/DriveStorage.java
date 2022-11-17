@@ -27,9 +27,7 @@ public class DriveStorage extends Storage {
     }
 
     @Override
-    public void editConfig(String path, String maxSize, String maxNumOfFiles, List<String> unsupportedFiles) throws Exception {
-        // TODO storageName?
-        String storageName = "Vidi sta sa ovim";
+    public void editConfig(String storageName, String maxSize, String maxNumOfFiles, List<String> unsupportedFiles) throws Exception {
 
         Map<String, Object> configMap = new HashMap<>();
         configMap.put("path", storageName);
@@ -55,12 +53,7 @@ public class DriveStorage extends Storage {
     }
 
     @Override
-    public void createStorage() throws Exception {
-
-        // TODO path, storageName i jos ako nesto, vadimo iz config.json ili default
-        String storageName = "Naziv iz config.json";
-        String path = "/";
-
+    public void createStorage(String path, String storageName) throws Exception {
 
         File parent = GoogleDrive.getFile(path);
         File fileMetadata = new File();
