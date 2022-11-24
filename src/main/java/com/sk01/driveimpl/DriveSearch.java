@@ -7,13 +7,9 @@ import java.sql.Time;
 import java.util.List;
 
 public class DriveSearch extends Search {
-    @Override
-    public void getFiles(File dir) {
-
-    }
 
     @Override
-    public void getFiles(String podstring, String name) {
+    public void getFile(String path) throws Exception {
 
     }
 
@@ -23,12 +19,17 @@ public class DriveSearch extends Search {
     }
 
     @Override
-    public void getAllFiles(File dir) {
+    public void getFilesWithExtension(String extension) throws Exception {
 
     }
 
     @Override
-    public boolean containsFiles(File dir, List fileNames) {
+    public void getAllFiles(String path) throws Exception {
+
+    }
+
+    @Override
+    public boolean containsFiles(String path, List fileNames) throws Exception {
         return false;
     }
 
@@ -48,7 +49,7 @@ public class DriveSearch extends Search {
     }
 
     @Override
-    public void getFiles(File dir, Time pocetak, Time kraj) {
+    public void getFiles(String path, Time pocetak, Time kraj) throws Exception {
 
     }
 
