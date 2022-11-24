@@ -12,8 +12,9 @@ import java.util.List;
 
 public class DriveSearch extends Search {
 
+
     @Override
-    public List<java.io.File> getFile(String path) throws Exception {
+    public java.io.File getFile(String path) throws Exception {
         return null;
     }
 
@@ -51,9 +52,10 @@ public class DriveSearch extends Search {
     }
 
     @Override
-    public java.io.File getDir(String fileName) throws Exception {
+    public String getDir(String fileName) throws Exception {
         return null;
     }
+
 
     @Override
     public List<java.io.File> sortByName(List files) throws Exception {
