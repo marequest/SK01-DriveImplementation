@@ -134,7 +134,6 @@ public class DriveCreate extends Create {
     }
 
     private boolean checkNumOfFiles() {
-
         int counter = 0;
         try {
             counter = countFiles(StorageInfo.getInstance().getConfig().getPath(), counter);

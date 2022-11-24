@@ -1,6 +1,7 @@
 package com.sk01.driveimpl;
 
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import com.sk01.exceptions.UnexistingPathException;
 import com.sk01.storage.Operations;
 import com.sk01.utils.StorageInfo;
@@ -27,6 +28,19 @@ public class DriveOperations extends Operations {
 
         File child = GoogleDrive.getFile(path);
         GoogleDrive.getDriveService().files().delete(child.getId()).execute();
+    }
+
+    @Override
+    public void deleteAll(String rootPath) throws Exception {
+        File root = GoogleDrive.getRootFile(rootPath);
+        String query = "parents=" + "'" + root.getId() + "'";
+        FileList list = GoogleDrive.getDriveService().files().list().setQ(query).setFields("nextPageToken, files(id, name, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
+
+        for (File file: list.getFiles()) {
+            if (!file.getName().equals("config.json")) {
+                GoogleDrive.getDriveService().files().delete(file.getId()).execute();
+            }
+        }
     }
 
     @Override
