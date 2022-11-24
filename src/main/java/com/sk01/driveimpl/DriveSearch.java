@@ -1,40 +1,48 @@
 package com.sk01.driveimpl;
 
+import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.File;
 import com.sk01.storage.Search;
+import com.sk01.utils.StorageInfo;
 
-import java.io.File;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DriveSearch extends Search {
-    @Override
-    public void getFiles(File dir) {
-
-    }
 
     @Override
-    public void getFiles(String podstring, String name) {
-
-    }
-
-    @Override
-    public List<File> getFile(String path) throws Exception {
+    public List<java.io.File> getFile(String path) throws Exception {
         return null;
     }
 
     @Override
-    public void getFiles(String extension) {
-
-    }
-
-    @Override
-    public List<File> getFilesWithExtension(String extension) throws Exception {
+    public List<java.io.File> getFiles(String podstring) throws Exception {
         return null;
     }
 
     @Override
-    public List<File> getAllFiles(String path) throws Exception {
+    public List<java.io.File> getFilesWithExtension(String extension) throws Exception {
         return null;
+    }
+
+    @Override
+    public List<java.io.File> getAllFiles(String path) throws Exception {
+        path = StorageInfo.getInstance().getConfig().getPath() + path;
+
+        File dir = GoogleDrive.getFile(path);
+        String query = "parents=" + "'" + dir.getId() + "'";  //nalazimo decu preko parent id-a
+        FileList list = GoogleDrive.service.files().list().setQ(query).setFields("nextPageToken, files(id, name, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
+
+        List<File> files = new ArrayList<>();
+        for (File file: list.getFiles()) {
+            if (!file.getMimeType().equals("application/vnd.google-apps.folder")) {
+                files.add(file);
+            }
+        }
+
+        return getJavaFiles(files);
     }
 
     @Override
@@ -43,42 +51,40 @@ public class DriveSearch extends Search {
     }
 
     @Override
-    public void getAllFiles(File dir) {
-
-    }
-
-    @Override
-    public boolean containsFiles(File dir, List fileNames) {
-        return false;
-    }
-
-    @Override
-    public File getDir(String fileName) {
+    public java.io.File getDir(String fileName) throws Exception {
         return null;
     }
 
     @Override
-    public void sortByName(List files) {
-
-    }
-
-    @Override
-    public void sortByDate(List files) {
-
-    }
-
-    @Override
-    public List<File> getFiles(String path, Time pocetak, Time kraj) throws Exception {
+    public List<java.io.File> sortByName(List files) throws Exception {
         return null;
     }
 
     @Override
-    public void getFiles(File dir, Time pocetak, Time kraj) {
-
+    public List<java.io.File> sortByDate(List files) throws Exception {
+        return null;
     }
 
     @Override
-    public void filtrate(String string) {
+    public List<java.io.File> getFiles(String path, Time pocetak, Time kraj) throws Exception {
+        return null;
+    }
 
+    @Override
+    public List<java.io.File> filtrate(String string) throws Exception {
+        return null;
+    }
+
+    private List<java.io.File> getJavaFiles(List<File> files) {
+        List<java.io.File> javaFiles = new ArrayList<>();
+
+        for (File file: files) {
+            String name = file.getName();
+
+            java.io.File newFile = new java.io.File(name);
+            javaFiles.add(newFile);
+        }
+
+        return javaFiles;
     }
 }
