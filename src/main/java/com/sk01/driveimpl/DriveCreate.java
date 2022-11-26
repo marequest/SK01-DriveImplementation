@@ -49,6 +49,9 @@ public class DriveCreate extends Create {
     @Override
     public void createDirs(String path, int velicinaListe) {
 
+        path = StorageInfo.getInstance().getConfig().getPath() + path;
+        File parent = GoogleDrive.getFile(path);
+
         String name = "Directory ";
         while(velicinaListe > 0){
             name = name.concat(String.valueOf(indexDir));
@@ -57,6 +60,7 @@ public class DriveCreate extends Create {
             File fileMetadata = new File();
             fileMetadata.setName(name);
             fileMetadata.setMimeType("application/vnd.google-apps.folder");
+            fileMetadata.setParents(List.of(parent.getId()));
 
             try {
                 File file = GoogleDrive.getDriveService().files().create(fileMetadata).setFields("id").execute();
@@ -83,9 +87,7 @@ public class DriveCreate extends Create {
     public void createFiles(String path, String name) throws Exception {
         path = StorageInfo.getInstance().getConfig().getPath() + path;
 
-
         String[] nameSplited = name.split("\\.");
-
 
         if (StorageInfo.getInstance().getConfig().getUnsuportedFiles().contains(nameSplited[1])) {
             throw new ConfigException("Unsupported extension");
@@ -96,7 +98,6 @@ public class DriveCreate extends Create {
         }
 
         makeFile(path, name);
-
     }
 
     private void makeFile(String path, String name) throws IOException {
@@ -112,6 +113,10 @@ public class DriveCreate extends Create {
 
     @Override
     public void createFiles(String path, int velicinaListe) {
+
+        path = StorageInfo.getInstance().getConfig().getPath() + path;
+        File parent = GoogleDrive.getFile(path);
+
         String name = "File ";
         while(velicinaListe > 0) {
             name = name.concat(String.valueOf(indexFile));
@@ -120,6 +125,7 @@ public class DriveCreate extends Create {
             File fileMetadata = new File();
 
             fileMetadata.setName(name);
+            fileMetadata.setParents(List.of(parent.getId()));
 
             File file = null;
             try {
@@ -161,3 +167,16 @@ public class DriveCreate extends Create {
         return counter;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

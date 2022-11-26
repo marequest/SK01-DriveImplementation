@@ -55,7 +55,7 @@ public class DriveSearch extends Search {
         List<File> files = new ArrayList<>();
         for (File file: list.getFiles()) {
             if (!file.getMimeType().equals("application/vnd.google-apps.folder")) {
-                if (file.getName().endsWith(extension)) {
+                if (file.getFileExtension().equals(extension)) {
                     files.add(file);
                 }
             }
@@ -107,8 +107,6 @@ public class DriveSearch extends Search {
         File dir = GoogleDrive.getFile(path);
         String query = "parents=" + "'" + dir.getId() + "'";
         FileList list = GoogleDrive.service.files().list().setQ(query).setFields("nextPageToken, files(id, name, createdTime, mimeType, modifiedTime, parents, fileExtension)").execute();
-
-        boolean containsAll = false;
 
         List<File> files = new ArrayList<>();
         for (File file: list.getFiles()) {
@@ -166,6 +164,7 @@ public class DriveSearch extends Search {
 
     @Override
     public List<java.io.File> filtrate(String string) throws Exception {
+        // TODO
         return null;
     }
 
