@@ -45,7 +45,6 @@ public class DriveStorage extends Storage {
             e.printStackTrace();
         }
 
-        // Uzimamo fajl, brisemo, dodajemo novi
         File configDrive = GoogleDrive.getFile(storageName + "/config.json");
         GoogleDrive.getDriveService().files().delete(configDrive.getId()).execute();
         createSettings(config, storageName);
@@ -71,7 +70,6 @@ public class DriveStorage extends Storage {
 
         java.io.File configFile = new java.io.File("config.json");
 
-        // Pravimo i cuvamo config na drajvu
         initConfig(configFile, storageName);
         createSettings(configFile, storageName);
     }
@@ -101,7 +99,7 @@ public class DriveStorage extends Storage {
         fileMetadata.setName(settings.getName());
         fileMetadata.setParents(List.of(parent.getId()));
 
-        try { // TODO ?
+        try {
             GoogleDrive.service.files().create(fileMetadata, uploadStreamContent).setFields("id, webContentLink, webViewLink, parents").execute();
         }
         catch (IOException e) {

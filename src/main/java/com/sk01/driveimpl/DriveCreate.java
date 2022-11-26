@@ -87,7 +87,7 @@ public class DriveCreate extends Create {
         String[] nameSplited = name.split("\\.");
 
 
-        if (StorageInfo.getInstance().getConfig().getUnsuportedFiles().contains(nameSplited[1])) {//unsupported files
+        if (StorageInfo.getInstance().getConfig().getUnsuportedFiles().contains(nameSplited[1])) {
             throw new ConfigException("Unsupported extension");
         }
 
@@ -152,13 +152,12 @@ public class DriveCreate extends Create {
 
         for (File file: list.getFiles()) {
             if (file.getMimeType().equals("application/vnd.google-apps.folder")) {
-                counter = countFiles(name + "/" + file.getName(), counter);  //ako je folder vrati broj svih fajlova rekurzivno za prosledjeni counter
+                counter = countFiles(name + "/" + file.getName(), counter);
             }
             else {
                 counter++;
             }
         }
-
         return counter;
     }
 }

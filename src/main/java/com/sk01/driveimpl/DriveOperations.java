@@ -56,7 +56,7 @@ public class DriveOperations extends Operations {
         File file = GoogleDrive.getFile(fromPath);
         File dir = GoogleDrive.getFile(toPath);
 
-        StringBuilder previousParents = new StringBuilder();  //mora builder, jer toString lose radi
+        StringBuilder previousParents = new StringBuilder();
         for (String parent : file.getParents()) {
             previousParents.append(parent);
             previousParents.append(',');
