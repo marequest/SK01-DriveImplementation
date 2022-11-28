@@ -5,6 +5,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.sk01.storage.Storage;
+import com.sk01.utils.Config;
 import com.sk01.utils.StorageInfo;
 
 
@@ -71,7 +72,11 @@ public class DriveStorage extends Storage {
         java.io.File configFile = new java.io.File("config.json");
 
         initConfig(configFile, storageName);
+
+        readConfig(configFile);
         createSettings(configFile, storageName);
+
+
     }
 
     private void initConfig(java.io.File configFile, String path) {
@@ -101,6 +106,21 @@ public class DriveStorage extends Storage {
 
         try {
             GoogleDrive.service.files().create(fileMetadata, uploadStreamContent).setFields("id, webContentLink, webViewLink, parents").execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readConfig(java.io.File configFile) throws Exception{
+        Gson gson = new Gson();
+
+        try {
+            Reader reader = new FileReader(configFile);
+            Config config = gson.fromJson(reader, Config.class);
+
+            StorageInfo.getInstance().setConfig(config);
+            reader.close();
         }
         catch (IOException e) {
             e.printStackTrace();

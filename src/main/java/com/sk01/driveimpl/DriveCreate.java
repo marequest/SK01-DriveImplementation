@@ -148,6 +148,10 @@ public class DriveCreate extends Create {
             e.printStackTrace();
         }
 
+        if(StorageInfo.getInstance().getConfig().getNumberOfFiles().equals("undefined")){
+            return true;
+        }
+
         return counter + 1 <= Integer.parseInt(StorageInfo.getInstance().getConfig().getNumberOfFiles());
     }
 
